@@ -33,14 +33,16 @@ AV.Cloud.define('randomAcquireQuestions',function(request){
 		var number = results[0].get("number");
 		var arr = shuffle(number);
 		return arr;
-// 		var mainQuery = new AV.Query(level);
+		var mainQuery = new AV.Query(level);
+		mainQuery.equalTo("id",arr[0]);
+		
 // 		for(var i = 0;i<arr.length;i++){
 // 			var query = new AV.Query(level);
 // 			query.equalTo("id",arr[i]);
 // 			mainQuery = AV.Query.or(mainQuery,query);
 // 		}
-// 		return mainQuery.find().then(function(results){
-// 			return results;
-// 		});
+		return mainQuery.find().then(function(results){
+			return results;
+		});
 	});
 });
