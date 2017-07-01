@@ -7,6 +7,12 @@ AV.Cloud.define('hello', function(request) {
   return 'Hello world!';
 });
 
-AV.Cloud.define('helloagain',function(request){
-		return "Hello world again";
+
+AV.Cloud.define('randomAcquireQuestions',function(request){
+		var level = request.params.level;
+		var query = new AV.Query(level);
+		query.equalTo("No",1);
+		return query.find().then(function(results){
+			return results[0].get("key");
+		});
 });
