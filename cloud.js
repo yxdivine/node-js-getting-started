@@ -32,7 +32,7 @@ AV.Cloud.define('randomAcquireQuestions',function(request){
 	return query.find().then(function(results){
 		var number = results[0].get("number");
 		var arr = shuffle(number);
-		return arr;
+
 		var mainQuery = new AV.Query(level);
 		mainQuery.equalTo("id",arr[0]);
 		
