@@ -16,7 +16,7 @@ var randomSort = function (a, b) {
 //shuffling function
 var shuffle = function(total){
         var retVal = [];
-        for (var i = 0; i < total; i++) {
+        for (var i = 1; i <= total; i++) {
             retVal.push(i);
         }
         retVal = retVal.sort(randomSort);
