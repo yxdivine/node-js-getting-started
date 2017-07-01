@@ -32,15 +32,15 @@ AV.Cloud.define('randomAcquireQuestions',function(request){
 	return query.find().then(function(results){
 		var number = results[0].get("number");
 		var arr = shuffle(number);
-		var qs = [];
-		var mainQuery = new AV.Query(level);
-		for(var i = 0;i<arr.length;i++){
-			var query = new AV.Query(level);
-			query.equalTo("id",arr[i]);
-			mainQuery = AV.Query.or(mainQuery,query);
-		}
-		return mainQuery.find().then(function(results){
-			return results;
-		});
+		return arr;
+// 		var mainQuery = new AV.Query(level);
+// 		for(var i = 0;i<arr.length;i++){
+// 			var query = new AV.Query(level);
+// 			query.equalTo("id",arr[i]);
+// 			mainQuery = AV.Query.or(mainQuery,query);
+// 		}
+// 		return mainQuery.find().then(function(results){
+// 			return results;
+// 		});
 	});
 });
