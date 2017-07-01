@@ -7,12 +7,12 @@ AV.Cloud.define('hello', function(request) {
   return 'Hello world!';
 });
 
-
 AV.Cloud.define('randomAcquireQuestions',function(request){
-		var level = request.params.level;
-		var query = new AV.Query(level);
-		query.equalTo("No",1);
-		return query.find().then(function(results){
-			return results;
-		});
+	var level = request.params.level;
+	var query = new AV.Query("config");
+	query.equalTo("level",level);
+	return query.find().then(function(results){
+		
+		return results[0].number;
+	});
 });
