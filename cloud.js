@@ -11,8 +11,12 @@ AV.Cloud.define('randomAcquireQuestions',function(request){
 	var level = request.params.level;
 	var query = new AV.Query("config");
 	query.equalTo("level",level);
-	return query.find().then(function(results){
-		
-		return results[0].get("number");
+	query.find().then(function(results){
+		var number = results[0].get("number");
+		var arr = [];
+		for(var i = 0;i<50;i++){
+			arr.push(Math.floor(Math.random()*number +1));
+		}
+		return arr;
 	});
 });
