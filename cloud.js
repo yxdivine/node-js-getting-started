@@ -13,6 +13,6 @@ AV.Cloud.define('randomAcquireQuestions',function(request){
 	query.equalTo("level",level);
 	return query.find().then(function(results){
 		
-		return results[0];
+		return results[0].get("number");
 	});
 });
