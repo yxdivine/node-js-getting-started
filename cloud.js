@@ -6,21 +6,25 @@ var AV = require('leanengine');
 AV.Cloud.define('hello', function(request) {
   return 'Hello world!';
 });
-//shuffling function
+//constant
+var quizSize = 50;
+
+//randomsorting
 var randomSort = function (a, b) {
     return Math.random() > .5 ? -1 : 1;
 };
-
+//shuffling function
 var shuffle = function(total){
         var retVal = [];
         for (var i = 0; i < total; i++) {
             retVal.push(i);
         }
         retVal = retVal.sort(randomSort);
-        retVal = retVal.slice(0, $scope.quizSize);
+        retVal = retVal.slice(0, quizSize);
         return retVal;
 };
 
+//acquire questions from cloud
 AV.Cloud.define('randomAcquireQuestions',function(request){
 	var level = request.params.level;
 	var query = new AV.Query("config");
