@@ -6,3 +6,7 @@ var AV = require('leanengine');
 AV.Cloud.define('hello', function(request) {
   return 'Hello world!';
 });
+
+AV.Cloud.define('helloagain',function(request){
+		return "Hello world again";
+});
