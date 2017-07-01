@@ -13,6 +13,6 @@ AV.Cloud.define('randomAcquireQuestions',function(request){
 		var query = new AV.Query(level);
 		query.equalTo("No",1);
 		return query.find().then(function(results){
-			return results[0].get("key");
+			return results;
 		});
 });
