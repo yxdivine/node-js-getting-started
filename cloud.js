@@ -56,7 +56,7 @@ AV.Cloud.define('uploadscore', function (request) {
     var LB = AV.Object.extend('LeaderBoard');
     //add assertions here
     if(score<0 || score>100){
-        return "error: invalid score":
+        return "error!invalid score":
     }
 
     var entry = new LB();
