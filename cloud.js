@@ -52,7 +52,7 @@ AV.Cloud.define('uploadscore', function (request) {
     var level = request.params.level;
     var score = request.params.score;
     var time = request.params.time;
-    var user = request.params.user;
+    var userid = request.params.user;
     var LB = AV.Object.extend('leaderboard');
     //
 
@@ -60,13 +60,14 @@ AV.Cloud.define('uploadscore', function (request) {
     var entry = new LB();
     entry.set('lvl', level);
     entry.set('score', score);
-    entry.set('user', user);
+    //entry.set('user', user);
+    var user = new AV.User();
+    user.id=userid;
     entry.set('exactTime', time);
     entry.set('uploadTime', new Date());
     return entry.save().then(function (savedEntry) {
-        //console.log('objectId is ' + todo.id);
-        var query = new AV.Query("LeaderBoard");
-        query.equalTo("level",this.level);
+        //var query = new AV.Query("LeaderBoard");
+        //query.equalTo("level",this.level);
         return this.level;
     }, function (error) {
         console.error(error);
