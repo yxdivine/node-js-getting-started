@@ -60,7 +60,7 @@ AV.Cloud.define('uploadscore', function (request) {
 //     }
 
     var entry = new LB();
-    entry.set('lvl', level);
+    entry.set('level', level);
     entry.set('score', score);
     //entry.set('user', user);
     var user = new AV.User();
