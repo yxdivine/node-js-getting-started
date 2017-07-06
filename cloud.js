@@ -71,6 +71,7 @@ AV.Cloud.define('uploadscore', function (request) {
     return entry.save().then(function (savedEntry) {
         var query = new AV.Query("LeaderBoard");
         query.equalTo("level",request.params.level);
+        console.log("lvl "+request.params.level);
         query.addDescending("score");
         query.addAscending("exactTime");
         query.addAscending("uploadTime");
