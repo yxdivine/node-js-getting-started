@@ -53,7 +53,7 @@ AV.Cloud.define('uploadscore', function (request) {
     var score = request.params.score;
     var time = request.params.time;
     var userid = request.params.user;
-    var LB = AV.Object.extend('leaderboard');
+    var LB = AV.Object.extend('LeaderBoard');
     //
 
 
