@@ -68,7 +68,7 @@ AV.Cloud.define('uploadscore', function (request) {
     return entry.save().then(function (savedEntry) {
         //var query = new AV.Query("LeaderBoard");
         //query.equalTo("level",this.level);
-        return this.level;
+        return savedEntry;
     }, function (error) {
         console.error(error);
         return error;
