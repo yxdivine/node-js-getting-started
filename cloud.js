@@ -1,7 +1,7 @@
 var AV = require('leanengine');
 
 /**
- * 一个简单的云代码方法
+ * 一个简单的云代码方法，测试连接
  */
 AV.Cloud.define('hello', function (request) {
     return 'Hello world!';
@@ -69,20 +69,37 @@ AV.Cloud.define('uploadscore', function (request) {
     entry.set('uploadTime', new Date());
     entry.set('user',user);
     return entry.save().then(function (savedEntry) {
-        var query = new AV.Query("LeaderBoard");
-        query.equalTo("level",request.params.level);
-        console.log("lvl "+request.params.level);
-        query.addDescending("score");
-        query.addAscending("exactTime");
-        query.addAscending("uploadTime");
-//         query.limit(100);
-        return query.find().then(function(results){
-            return results;
-        },function(error){
-            return error;
-        });
+        return savedEntry;
+//         var query = new AV.Query("LeaderBoard");
+//         query.equalTo("level",request.params.level);
+//         console.log("lvl "+request.params.level);
+//         query.addDescending("score");
+//         query.addAscending("exactTime");
+//         query.addAscending("uploadTime");
+// //         query.limit(100);
+//         return query.find().then(function(results){
+//             return results;
+//         },function(error){
+//             return error;
+//         });
     }, function (error) {
         return error;
     });
 
+});
+
+AV.define('getLeaderBoard',function(request){
+    var level = request.params.level;
+    var query = new AV.query('LeaderBoard');
+    query.equalTo('level',level);
+    query.addDescending("score");
+    query.addAscending("exactTime");
+    query.addAscending("uploadTime");
+    return query.find().then(function(results){
+        return results;
+    },function(error){
+        return error;
+    });
+    
+    
 });
