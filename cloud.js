@@ -90,7 +90,7 @@ AV.Cloud.define('uploadscore', function (request) {
 
 AV.Cloud.define('getLeaderBoard',function(request){
     var level = request.params.level;
-    var query = new AV.query('LeaderBoard');
+    var query = new AV.Query('LeaderBoard');
     query.equalTo('level',level);
     query.addDescending("score");
     query.addAscending("exactTime");
