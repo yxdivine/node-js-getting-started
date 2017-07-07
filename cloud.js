@@ -88,7 +88,7 @@ AV.Cloud.define('uploadscore', function (request) {
 
 });
 
-AV.define('getLeaderBoard',function(request){
+AV.Cloud.define('getLeaderBoard',function(request){
     var level = request.params.level;
     var query = new AV.query('LeaderBoard');
     query.equalTo('level',level);
