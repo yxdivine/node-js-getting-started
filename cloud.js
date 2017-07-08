@@ -103,3 +103,16 @@ AV.Cloud.define('getLeaderBoard',function(request){
     
     
 });
+
+AV.Cloud.beforeSave('LeaderBoard', function(request) {
+  var time = request.object.get('exactTime');
+  if (time && time > 8000) {
+      var min = Math.floor(time/60000);
+      var sec = time/1000 - min * 60;
+      request.object.set("min",min);
+      request.object.set("sec",sec);
+  } else {
+    // 不保存数据，并返回错误
+    throw new AV.Cloud.Error('Invalid result!');
+  }
+});
