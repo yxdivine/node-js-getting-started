@@ -53,7 +53,7 @@ AV.Cloud.define('uploadscore', function (request) {
     var score = request.params.score;
     var time = request.params.time;
     var userid = request.params.user;
-    var user = request.params.username;
+    var username = request.params.username;
     var LB = AV.Object.extend('LeaderBoard');
     //add assertions here
 //     if(score<0 || score>100){
@@ -63,7 +63,7 @@ AV.Cloud.define('uploadscore', function (request) {
     var entry = new LB();
     entry.set('level', level);
     entry.set('score', score);
-    entry.set('username',user);
+    entry.set('username',username);
     var user = new AV.User();
     user.id=userid;
     entry.set('exactTime', time);
