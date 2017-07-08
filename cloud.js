@@ -107,7 +107,8 @@ AV.Cloud.define('getLeaderBoard',function(request){
 
 AV.Cloud.beforeSave('LeaderBoard', function(request) {
   var time = request.object.get('exactTime');
-  if (time && time > 8000 && time < 1800000) {
+    var score = request.object.get('score');
+  if (score && score>60 &&time && time > 8000 && time < 1800000) {
       var min = Math.floor(time/60000);
       var sec = time/1000 - min * 60;
       request.object.set("min",min);
