@@ -124,16 +124,16 @@ AV.Cloud.define('uploadRecord', function (request) {
     //get current record
     var user = new AV.User();
     user.id = userid;
-    var query = new AV.Query("record");
+    var query = new AV.Query('record');
     query.equalTo('user', user);
     return query.find().then(function (success) {
         var entry;
-        if (success.length > 0){//update existing entry
+        if (success.length > 0) {//update existing entry
             entry = success[0];
             var cscore = entry.get(level + "_score");
             var ctime = entry.get(level + "_time");
             console.log(cscore + "|" + ctime);
-            if (cscore!=0 && (cscore > score || (cscore == score && ctime < time))) {
+            if (cscore && (cscore > score || (cscore == score && ctime < time))) {
                 entry.set(level + "_score", score);
                 entry.set(level + "_time", time);
                 entry.set(level + "_utime", new Date());
@@ -161,10 +161,10 @@ AV.Cloud.define('uploadRecord', function (request) {
 AV.Cloud.define('getRecord', function (request) {
     var level = request.params.level;
     var query = new AV.Query('record');
-    query.select([level+"_score",level+"_time",level+"_utime"]);
-    query.addDescending(level+"_score");
-    query.addAscending(level+"_time");
-    query.addAscending(level+"_utime");
+    query.select([level + "_score", level + "_time", level + "_utime"]);
+    query.addDescending(level + "_score");
+    query.addAscending(level + "_time");
+    query.addAscending(level + "_utime");
     return query.find().then(function (results) {
         return results;
     }, function (error) {
