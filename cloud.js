@@ -132,7 +132,7 @@ AV.Cloud.define('uploadRecord', function (request) {
             entry = success[0];
             var cscore = entry.get(level + "_score");
             var ctime = entry.get(level + "_time");
-            console.log(cscore + "|" + ctime);
+            console.log(JSON.stringify(entry));
             if (cscore && (cscore > score || (cscore == score && ctime < time))) {
                 entry.set(level + "_score", score);
                 entry.set(level + "_time", time);
