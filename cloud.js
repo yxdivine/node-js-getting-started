@@ -132,12 +132,12 @@ AV.Cloud.define('uploadRecord', function (request) {
             entry = success[0];
             var cscore = entry.get(level + "_score");
             var ctime = entry.get(level + "_time");
-            console.log(typeof cscore);
-            console.log(JSON.stringify(entry));
-            console.log((typeof cscore) != 'undefined');
-            console.log((typeof cscore) == 'undefined');
-            console.log((typeof cscore) !== 'undefined');
-            console.log((typeof cscore) === 'undefined');
+//             console.log(typeof cscore);
+//             console.log(JSON.stringify(entry));
+//             console.log((typeof cscore) != 'undefined');
+//             console.log((typeof cscore) == 'undefined');
+//             console.log((typeof cscore) !== 'undefined');
+//             console.log((typeof cscore) === 'undefined');
             if ((typeof cscore) == 'undefined' || cscore > score || (cscore == score && ctime < time)) {
                 //existing user record breaking current record
                 entry.set(level + "_score", score);
@@ -158,7 +158,7 @@ AV.Cloud.define('uploadRecord', function (request) {
             entry.save();
             return "success";
         }
-        return "keep prev record";
+        return "unknown error, keep prev record";
     }, function (error) {
         console.log(error);
         return error;
@@ -170,6 +170,7 @@ AV.Cloud.define('getRecord', function (request) {
     var level = request.params.level;
     var query = new AV.Query('record');
     query.select([level + "_score", level + "_time", level + "_utime"]);
+    query.greaterThan(level + "_score", 59);
     query.addDescending(level + "_score");
     query.addAscending(level + "_time");
     query.addAscending(level + "_utime");
