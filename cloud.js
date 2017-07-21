@@ -127,18 +127,12 @@ AV.Cloud.define('uploadRecord', function (request) {
     var query = new AV.Query('record');
     query.equalTo('user', user);
     return query.find().then(function (success) {
-        var entry;
+        var current;
         if (success.length > 0) {//update existing entry
-            entry = success[0];
-            var cscore = entry.get(level + "_score");
-            var ctime = entry.get(level + "_time");
-//             console.log(typeof cscore);
-//             console.log(JSON.stringify(entry));
-//             console.log((typeof cscore) != 'undefined');
-//             console.log((typeof cscore) == 'undefined');
-//             console.log((typeof cscore) !== 'undefined');
-//             console.log((typeof cscore) === 'undefined');
-            if ((typeof cscore) == 'undefined' || cscore > score || (cscore == score && ctime < time)) {
+            current = success[0];
+            var cscore = current.get(level + "_score");
+            var ctime = current.get(level + "_time");
+            if ((typeof cscore) == 'undefined' || cscore < score || (cscore == score && ctime > time)) {
                 //existing user record breaking current record
                 entry.set(level + "_score", score);
                 entry.set(level + "_time", time);
