@@ -138,12 +138,15 @@ AV.Cloud.define('uploadRecord', function (request) {
             console.log((typeof cscore) == 'undefined');
             console.log((typeof cscore) !== 'undefined');
             console.log((typeof cscore) === 'undefined');
-            if (((typeof cscore) != 'undefined') && (cscore > score || (cscore == score && ctime < time))) {
+            if ((typeof cscore) == 'undefined' || cscore > score || (cscore == score && ctime < time)) {
+                //existing user record breaking current record
                 entry.set(level + "_score", score);
                 entry.set(level + "_time", time);
                 entry.set(level + "_utime", new Date());
                 entry.save();
-                return "success";
+                return "new record";
+            }else{
+                return "try harder next time";
             }
         } else {//create new entry
             entry = new Record();
