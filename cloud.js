@@ -134,22 +134,22 @@ AV.Cloud.define('uploadRecord', function (request) {
             var ctime = current.get(level + "_time");
             if ((typeof cscore) == 'undefined' || cscore < score || (cscore == score && ctime > time)) {
                 //existing user record breaking current record
-                entry.set(level + "_score", score);
-                entry.set(level + "_time", time);
-                entry.set(level + "_utime", new Date());
-                entry.save();
+                current.set(level + "_score", score);
+                current.set(level + "_time", time);
+                current.set(level + "_utime", new Date());
+                current.save();
                 return "new record";
             }else{
                 return "try harder next time";
             }
         } else {//create new entry
-            entry = new Record();
-            entry.set('user', user);
-            entry.set('username', username);
-            entry.set(level + "_score", score);
-            entry.set(level + "_time", time);
-            entry.set(level + "_utime", new Date());
-            entry.save();
+            current = new Record();
+            current.set('user', user);
+            current.set('username', username);
+            current.set(level + "_score", score);
+            current.set(level + "_time", time);
+            current.set(level + "_utime", new Date());
+            current.save();
             return "success";
         }
         return "unknown error, keep prev record";
