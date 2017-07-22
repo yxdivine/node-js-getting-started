@@ -163,7 +163,7 @@ AV.Cloud.define('uploadRecord', function (request) {
 AV.Cloud.define('getRecord', function (request) {
     var level = request.params.level;
     var query = new AV.Query('record');
-    query.select([level + "_score", level + "_time", level + "_utime"]);
+    query.select(["username", level + "_score", level + "_time", level + "_utime"]);
     query.greaterThan(level + "_score", 59);
     query.addDescending(level + "_score");
     query.addAscending(level + "_time");
