@@ -47,69 +47,113 @@ AV.Cloud.define('randomAcquireQuestions', function (request) {
         });
     });
 });
+//
+// AV.Cloud.define('uploadscore', function (request) {
+//     var level = request.params.level;
+//     var score = request.params.score;
+//     var time = request.params.time;
+//     var userid = request.params.user;
+//     var username = request.params.username;
+//     var LB = AV.Object.extend('LeaderBoard');
+//     //add assertions here
+// //     if(score<0 || score>100){
+// //         return 'error':
+// //     }
+//
+//     var entry = new LB();
+//     entry.set('level', level);
+//     entry.set('score', score);
+//     entry.set('username', username);
+//     var user = new AV.User();
+//     user.id = userid;
+//     entry.set('exactTime', time);
+//     entry.set('uploadTime', new Date());
+//     entry.set('user', user);
+//     return entry.save().then(function (savedEntry) {
+//         return savedEntry;
+//     }, function (error) {
+//         return error;
+//     });
+//
+// });
+//
+// AV.Cloud.define('getLeaderBoard', function (request) {
+//     var level = request.params.level;
+//     var query = new AV.Query('LeaderBoard');
+//     query.equalTo('level', level);
+//     query.addDescending("score");
+//     query.addAscending("exactTime");
+//     query.addAscending("uploadTime");
+//     return query.find().then(function (results) {
+//         return results;
+//     }, function (error) {
+//         return error;
+//     });
+//
+//
+// });
 
-AV.Cloud.define('uploadscore', function (request) {
-    var level = request.params.level;
-    var score = request.params.score;
-    var time = request.params.time;
-    var userid = request.params.user;
-    var username = request.params.username;
-    var LB = AV.Object.extend('LeaderBoard');
-    //add assertions here
-//     if(score<0 || score>100){
-//         return 'error':
+// AV.Cloud.beforeSave('LeaderBoard', function (request) {
+//     var time = request.object.get('exactTime');
+//     var score = request.object.get('score');
+//     if (score && score > 60 && time && time > 8000 && time < 1800000) {//valid
+//         var min = Math.floor(time / 60000);
+//         var sec = Math.floor(time / 1000 - min * 60 + 1);
+//         request.object.set("min", min);
+//         request.object.set("sec", sec);
+//         var level = parseInt(request.object.get('level').substr(1));
+//         var user = request.get(user);
+//
+//
+//     } else {
+//         // 不保存数据，并返回错误
+//         throw new AV.Cloud.Error('Invalid result!');
 //     }
+// });
 
-    var entry = new LB();
-    entry.set('level', level);
-    entry.set('score', score);
-    entry.set('username', username);
-    var user = new AV.User();
-    user.id = userid;
-    entry.set('exactTime', time);
-    entry.set('uploadTime', new Date());
-    entry.set('user', user);
-    return entry.save().then(function (savedEntry) {
-        return savedEntry;
-    }, function (error) {
-        return error;
+var updateRanking = function (user, username, lv, score, ftime, utime) {
+
+    var query = new AV.Query('Ranking');
+    query.equalTo('user', user);
+    query.find().then(function (res) {
+        var current;
+        if (success.length > 0) {
+            current = success[0];
+            var prev_lv = current.get('lv');
+            var prev_score = current.get('score');
+            var prev_ftime = current.get('finish_time');
+            var shouldUpdate = false;
+            if (lv > prev_lv) { // reached new level
+                shouldUpdate = true;
+            } else if (lv == prev_lv && score > prev_score) {// same level, new high score
+                shouldUpdate = true;
+            } else if (lv == prev_lv && score == prev_score && prev_ftime > ftime) {
+                // same level same score shorter time
+                shouldUpdate = true;
+            }
+            if (shouldUpdate) {
+                current.set('lv', lv);
+                current.set('score', score);
+                current.set('finish_time', ftime);
+                current.set('upload_time', utime);
+                current.save();
+            }
+        } else {
+            var Ranking = AV.Object.extend('Ranking');
+            current = new Ranking();
+            current.set('user', user);
+            current.set('username', username);
+            current.set('lv', lv);
+            current.set('score', score);
+            current.set('finish_time', ftime);
+            current.set('upload_time', utime);
+            current.save();
+        }
+    }, function (err) {
+        console.log(err);
     });
 
-});
-
-AV.Cloud.define('getLeaderBoard', function (request) {
-    var level = request.params.level;
-    var query = new AV.Query('LeaderBoard');
-    query.equalTo('level', level);
-    query.addDescending("score");
-    query.addAscending("exactTime");
-    query.addAscending("uploadTime");
-    return query.find().then(function (results) {
-        return results;
-    }, function (error) {
-        return error;
-    });
-
-
-});
-
-AV.Cloud.beforeSave('LeaderBoard', function (request) {
-    var time = request.object.get('exactTime');
-    var score = request.object.get('score');
-    if (score && score > 60 && time && time > 8000 && time < 1800000) {//valid
-        var min = Math.floor(time / 60000);
-        var sec = Math.floor(time / 1000 - min * 60 + 1);
-        request.object.set("min", min);
-        request.object.set("sec", sec);
-        var level = parseInt(request.object.get('level').substr(1));
-        var user = request.get(user);
-
-
-    } else {
-        // 不保存数据，并返回错误
-        throw new AV.Cloud.Error('Invalid result!');
-    }
-});
+}
 
 AV.Cloud.define('uploadRecord', function (request) {
     //parse entry
@@ -134,22 +178,26 @@ AV.Cloud.define('uploadRecord', function (request) {
             var ctime = current.get(level + "_time");
             if ((typeof cscore) == 'undefined' || cscore < score || (cscore == score && ctime > time)) {
                 //existing user record breaking current record
+                var uploadTime = new Date();
                 current.set(level + "_score", score);
                 current.set(level + "_time", time);
-                current.set(level + "_utime", new Date());
+                current.set(level + "_utime", uploadTime);
                 current.save();
+                updateRanking(user, username, parseInt(level.substr(1), 10), score, time, uploadTime);
                 return "new record";
-            }else{
+            } else {
                 return "try harder next time";
             }
         } else {//create new entry
             current = new Record();
+            var uploadTime = new Date();
             current.set('user', user);
             current.set('username', username);
             current.set(level + "_score", score);
             current.set(level + "_time", time);
-            current.set(level + "_utime", new Date());
+            current.set(level + "_utime", uploadTime);
             current.save();
+            updateRanking(user, username, parseInt(level.substr(1), 10), score, time, uploadTime);
             return "success";
         }
         return "unknown error, keep prev record";
@@ -157,13 +205,12 @@ AV.Cloud.define('uploadRecord', function (request) {
         console.log(error);
         return error;
     });
-
 });
 
 AV.Cloud.define('getRecord', function (request) {
     var level = request.params.level;
     var query = new AV.Query('record');
-    query.select(["username","user", level + "_score", level + "_time", level + "_utime"]);
+    query.select(["username", "user", level + "_score", level + "_time", level + "_utime"]);
     query.greaterThan(level + "_score", 59);
     query.addDescending(level + "_score");
     query.addAscending(level + "_time");
@@ -173,6 +220,8 @@ AV.Cloud.define('getRecord', function (request) {
     }, function (error) {
         return error;
     });
+});
 
+AV.Cloud.define('updateRanking', function (request) {
 
 });
