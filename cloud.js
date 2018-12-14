@@ -112,7 +112,7 @@ AV.Cloud.define('randomAcquireQuestions', function (request) {
 // });
 
 var updateRanking = function (user, username, lv, score, ftime, utime) {
-
+    console.log('updateRanking...');
     var query = new AV.Query('Ranking');
     query.equalTo('user', user);
     query.find().then(function (res) {
