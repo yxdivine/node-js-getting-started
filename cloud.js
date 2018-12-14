@@ -131,6 +131,7 @@ var updateRanking = function (user, username, lv, score, ftime, utime) {
                 // same level same score shorter time
                 shouldUpdate = true;
             }
+            console.log('shouldUpdate: '+shouldUpdate);
             if (shouldUpdate) {
                 current.set('lv', lv);
                 current.set('score', score);
@@ -220,8 +221,4 @@ AV.Cloud.define('getRecord', function (request) {
     }, function (error) {
         return error;
     });
-});
-
-AV.Cloud.define('updateRanking', function (request) {
-
 });
