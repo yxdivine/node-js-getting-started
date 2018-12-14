@@ -116,8 +116,10 @@ var updateRanking = function (user, username, lv, score, ftime, utime) {
     var query = new AV.Query('Ranking');
     query.equalTo('user', user);
     query.find().then(function (res) {
+        console.log('res;');
         var current;
         if (success.length > 0) {
+            console.log('found ranking');
             current = success[0];
             var prev_lv = current.get('lv');
             var prev_score = current.get('score');
@@ -137,9 +139,11 @@ var updateRanking = function (user, username, lv, score, ftime, utime) {
                 current.set('score', score);
                 current.set('finish_time', ftime);
                 current.set('upload_time', utime);
-                current.save();
+                console.log('update existing rank');
+                current.save().then(function(res){console.log(res);},function(err){console.log(err)});
             }
         } else {
+            console.log('not found ranking');
             var Ranking = AV.Object.extend('Ranking');
             current = new Ranking();
             current.set('user', user);
@@ -148,9 +152,11 @@ var updateRanking = function (user, username, lv, score, ftime, utime) {
             current.set('score', score);
             current.set('finish_time', ftime);
             current.set('upload_time', utime);
-            current.save();
+            console.log('saving new rank');
+            current.save().then(function(res){console.log(res);},function(err){console.log(err)});
         }
     }, function (err) {
+        console.log('err!!!');
         console.log(err);
     });
 
