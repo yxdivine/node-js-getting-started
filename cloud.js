@@ -118,9 +118,9 @@ var updateRanking = function (user, username, lv, score, ftime, utime) {
     query.find().then(function (res) {
         console.log('res;');
         var current;
-        if (success.length > 0) {
+        if (res.length > 0) {
             console.log('found ranking');
-            current = success[0];
+            current = res[0];
             var prev_lv = current.get('lv');
             var prev_score = current.get('score');
             var prev_ftime = current.get('finish_time');
